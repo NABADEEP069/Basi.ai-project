@@ -1,13 +1,24 @@
-// backend/models/authRequestModel.js
-import mongoose from 'mongoose';
+const express = require('express');
+const router = express.Router();
 
-const authRequestSchema = new mongoose.Schema({
-    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
-    treatment: { type: String, required: true },
-    doctorsNotes: { type: String },
-    status: { type: String, enum: ['pending', 'approved', 'denied'], default: 'pending' },
-    createdAt: { type: Date, default: Date.now },
+// Replace this with actual database or in-memory data handling
+const patients = [
+    { id: 1, name: 'Nilim Das', age: 17, condition: 'Flu' },
+    { id: 2, name: 'Rahul Son Boro', age: 27, condition: 'Piles' },
+    { id: 3, name: 'Prashant Sharma', age: 22, condition: 'Covid-19' },
+    { id: 4, name: 'Gargi Baishya', age: 21, condition: 'Back pain' },
+];
+
+// Get all patients
+router.get('/', (req, res) => {
+  res.json(patients);
 });
 
-const AuthRequest = mongoose.model('AuthRequest', authRequestSchema);
-export default AuthRequest;
+// Add a new patient
+router.post('/', (req, res) => {
+  const newPatient = req.body;
+  patients.push(newPatient);
+  res.status(201).json(newPatient);
+});
+
+module.exports = router;
