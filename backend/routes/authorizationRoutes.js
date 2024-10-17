@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const AuthorizationRequest = require('../models/AuthorizationRequest'); // Assuming this is the model you're using
+const AuthorizationRequest = require('../models/AuthorizationRequest'); 
 
-// GET all authorization requests
+
 router.get('/', async (req, res) => {
   try {
     const requests = await AuthorizationRequest.find().populate('patientId', 'name age');
@@ -12,7 +12,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST a new authorization request
 router.post('/', async (req, res) => {
   const { patientId, treatment, doctorsNotes } = req.body;
 
@@ -30,4 +29,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router; // Make sure you're exporting the router
+module.exports = router; 

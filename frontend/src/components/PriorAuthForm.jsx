@@ -8,7 +8,7 @@ const AuthorizationForm = () => {
     doctorsNotes: ''
   });
 
-  const [errorMessages, setErrorMessages] = useState(null); // State for error messages
+  const [errorMessages, setErrorMessages] = useState(null); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,24 +16,23 @@ const AuthorizationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessages(null); // Clear previous error messages
-
+    setErrorMessages(null); 
     try {
       const response = await axios.post('http://localhost:5000/api/authorization-requests', formData);
       console.log('Form submitted successfully', response.data);
       
-      // Show alert and refresh the page
+    
       alert('Request submitted successfully!');
       window.location.reload();
     } catch (error) {
-      // Handle validation errors
+      
       if (error.response && error.response.data.errors) {
         console.error('Validation Errors:', error.response.data.errors);
-        // Extract and set error messages to display
+       
         setErrorMessages(error.response.data.errors);
       } else {
         console.error('Error submitting form:', error);
-        setErrorMessages([{ msg: 'An unexpected error occurred. Please try again.' }]); // Generic error message
+        setErrorMessages([{ msg: 'An unexpected error occurred. Please try again.' }]); 
       }
     }
   };
@@ -81,7 +80,7 @@ const AuthorizationForm = () => {
           Submit
         </button>
 
-        {/* Display error messages */}
+      
         {errorMessages && (
           <div className="error-messages mt-4">
             {errorMessages.map((error, index) => (

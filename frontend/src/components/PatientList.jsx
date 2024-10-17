@@ -65,7 +65,7 @@ function PatientList() {
     <p className="text-gray-600">Name: {selectedPatient.name}</p>
     <p className="text-gray-600">Age: {selectedPatient.age}</p>
     <p className="text-gray-600">Medical History: {selectedPatient.medicalHistory}</p>
-    <div className="flex justify-center mt-2"> {/* Flex container to center the button */}
+    <div className="flex justify-center mt-2"> 
       <button 
         className="p-2 bg-pink-500 text-white rounded-md"
         onClick={() => setSelectedPatient(null)} 
