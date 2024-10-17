@@ -16,7 +16,7 @@ function App() {
       <br />
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 bg-white shadow-lg rounded-lg p-6 mb-4 lg:mb-0">
+        <div className="flex-1 bg-grey shadow-lg rounded-lg p-6 mb-4 lg:mb-0">
           <h2 className="text-2xl font-semibold mb-4">Search Patients</h2>
           <PatientList />
         </div>
