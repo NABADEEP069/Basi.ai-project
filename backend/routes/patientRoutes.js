@@ -1,24 +1,27 @@
 const express = require('express');
 const router = express.Router();
-
-// Replace this with actual database or in-memory data handling
-const patients = [
-    { id: 1, name: 'Nilim Das', age: 17, condition: 'Flu' },
-    { id: 2, name: 'Rahul Son Boro', age: 27, condition: 'Piles' },
-    { id: 3, name: 'Prashant Sharma', age: 22, condition: 'Covid-19' },
-    { id: 4, name: 'Gargi Baishya', age: 21, condition: 'Back pain' },
-];
+const Patient = require('../models/Patient');
 
 // Get all patients
-router.get('/', (req, res) => {
-  res.json(patients);
+router.get('/', async (req, res) => {
+  try {
+    const patients = await Patient.find();
+    res.json(patients);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// Add a new patient
-router.post('/', (req, res) => {
-  const newPatient = req.body;
-  patients.push(newPatient);
-  res.status(201).json(newPatient);
+// Create a new patient
+router.post('/', async (req, res) => {
+  const { name, age, medicalHistory, treatmentPlan } = req.body;
+  const patient = new Patient({ name, age, medicalHistory, treatmentPlan });
+  try {
+    const newPatient = await patient.save();
+    res.status(201).json(newPatient);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 module.exports = router;
