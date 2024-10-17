@@ -1,123 +1,99 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function PriorAuthorizationForm() {
+const AuthorizationForm = () => {
   const [formData, setFormData] = useState({
-    treatmentType: '',
-    insurancePlan: '',
-    dateOfService: '',
-    diagnosisCode: '',
+    patientId: '',
+    treatment: '',
+    doctorsNotes: ''
   });
 
+  const [errorMessages, setErrorMessages] = useState(null); // State for error messages
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setErrorMessages(null); // Clear previous error messages
 
     try {
-      const response = await fetch('http://localhost:5000/api/submit-form', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const message = await response.text();
-        alert(message);
-        setFormData({
-          treatmentType: '',
-          insurancePlan: '',
-          dateOfService: '',
-          diagnosisCode: '',
-        });
-      } else {
-        const errorText = await response.text();
-        alert('Error submitting form: ' + errorText);
-      }
+      const response = await axios.post('http://localhost:5000/api/authorization-requests', formData);
+      console.log('Form submitted successfully', response.data);
+      
+      // Show alert and refresh the page
+      alert('Request submitted successfully!');
+      window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while submitting the form: ' + error.message);
+      // Handle validation errors
+      if (error.response && error.response.data.errors) {
+        console.error('Validation Errors:', error.response.data.errors);
+        // Extract and set error messages to display
+        setErrorMessages(error.response.data.errors);
+      } else {
+        console.error('Error submitting form:', error);
+        setErrorMessages([{ msg: 'An unexpected error occurred. Please try again.' }]); // Generic error message
+      }
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form 
-        onSubmit={handleSubmit} 
-        className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full border border-gray-200"
-      >
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Prior Authorization Form
-        </h2>
-
+    <div className="max-w-md mx-auto p-5 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold text-center mb-5">Authorization Request Form</h2>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Treatment Type</label>
+          <label className="block text-gray-700 mb-2">Patient ID:</label>
           <input
             type="text"
-            name="treatmentType"
-            value={formData.treatmentType}
+            name="patientId"
+            value={formData.patientId}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            placeholder="Enter treatment type"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Insurance Plan</label>
+          <label className="block text-gray-700 mb-2">Treatment:</label>
           <input
             type="text"
-            name="insurancePlan"
-            value={formData.insurancePlan}
+            name="treatment"
+            value={formData.treatment}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            placeholder="Enter insurance plan"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Date of Service</label>
-          <input
-            type="date"
-            name="dateOfService"
-            value={formData.dateOfService}
+          <label className="block text-gray-700 mb-2">Doctor's Notes:</label>
+          <textarea
+            name="doctorsNotes"
+            value={formData.doctorsNotes}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          ></textarea>
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold mb-2">Diagnosis Code</label>
-          <input
-            type="text"
-            name="diagnosisCode"
-            value={formData.diagnosisCode}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            placeholder="Enter diagnosis code"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition"
-        >
+        <button type="submit" className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200">
           Submit
         </button>
+
+        {/* Display error messages */}
+        {errorMessages && (
+          <div className="error-messages mt-4">
+            {errorMessages.map((error, index) => (
+              <p key={index} className="text-red-500">
+                {error.msg}
+              </p>
+            ))}
+          </div>
+        )}
       </form>
     </div>
   );
-}
+};
 
-export default PriorAuthorizationForm;
+export default AuthorizationForm;

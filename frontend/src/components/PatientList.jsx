@@ -45,7 +45,7 @@ function PatientList() {
         {filteredPatients.length > 0 ? (
           filteredPatients.map(patient => (
             <li
-              key={patient.id || patient.name} // Use patient.id as key, fallback to patient.name if id is undefined
+              key={patient.id || patient.name} 
               className="p-4 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
               onClick={() => handlePatientClick(patient)}
             >
