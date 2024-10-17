@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Patient = require('../models/Patient');
 
-// Get all patients
 router.get('/', async (req, res) => {
   try {
     const patients = await Patient.find();
@@ -12,7 +11,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new patient
 router.post('/', async (req, res) => {
   const { name, age, medicalHistory, treatmentPlan } = req.body;
   const patient = new Patient({ name, age, medicalHistory, treatmentPlan });

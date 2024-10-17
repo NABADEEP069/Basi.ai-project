@@ -4,7 +4,7 @@ const authorizationRequestSchema = new mongoose.Schema({
   patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
   treatment: { type: String, required: true },
   doctorsNotes: { type: String },
-  status: { type: String, default: 'pending' }, // status can be 'pending', 'approved', 'denied'
+  status: { type: String, default: 'pending' }, // status tu 'pending', 'approved', 'denied' hbo pare
   createdAt: { type: Date, default: Date.now }
 });
 

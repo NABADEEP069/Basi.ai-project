@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AuthorizationRequest = require('../models/AuthorizationRequest');
 
-// Get all authorization requests
+
 router.get('/', async (req, res) => {
   try {
     const requests = await AuthorizationRequest.find().populate('patientId', 'name age');
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new authorization request
+
 router.post('/', async (req, res) => {
   const { patientId, treatment, doctorsNotes } = req.body;
   const authorizationRequest = new AuthorizationRequest({
@@ -29,7 +29,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update authorization request status
 router.patch('/:id', async (req, res) => {
   try {
     const updatedRequest = await AuthorizationRequest.findByIdAndUpdate(
